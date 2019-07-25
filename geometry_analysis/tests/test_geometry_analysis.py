@@ -8,6 +8,7 @@ import pytest
 import sys
 import numpy as np
 
+
 def test_geometry_analysis_imported():
     """Sample test, will always pass so long as import statement worked"""
     assert "geometry_analysis" in sys.modules
@@ -25,11 +26,56 @@ def test_calculate_distance():
     assert expected_distance == calculated_distance
 
 
-def test_calculate_angle():
+
+
+
+@pytest.mark.parametrize("p1, p2, p3, expected_angle",
+[
+(np.array([1, 0, 0]), np.array([0, 0, 0]), np.array([-1, 0, 0]), np.pi),
+(np.array([0, 0, 0]), np.array([0, 0, -1]), np.array([0, 1, 0]), np.pi/4)
+]
+)
+def test_calculate_angle(p1, p2, p3, expected_angle):
     """Test the calculate_angle function"""
 
-    r0 = np.array([0, 0, 0])
-    r1 = np.array([0, 0, -1])
-    r2 = np.array([0, 1, 0])
+    assert round(expected_angle, 10) == round(geometry_analysis.calculate_angle(p1, p2, p3), 10)
 
-    assert round(np.pi/4, 10) == round(geometry_analysis.calculate_angle(r0, r1, r2), 10)
+
+@pytest.fixture()
+def water_molecule():
+    name = "water"
+    symbols = ["H", "O", "H"]
+    coordinates = np.array([[2, 0, 0], [0, 0, 0], [-2, 0, 0]])
+
+    water = geometry_analysis.Molecule(name, symbols, coordinates)
+
+    return water
+
+def test_molecule_set_coordinates(water_molecule):
+    """Test that bond list is rebuilt when we reset coordinates. """
+
+    num_bonds = len(water_molecule.bonds)
+
+    assert(num_bonds == 2)
+
+    new_coordinates = np.array([[5, 0, 0], [0, 0, 0], [-2, 0, 0]])
+    water_molecule.coordinates = new_coordinates
+
+    new_bonds = len(water_molecule.bonds)
+
+    assert new_bonds == 1
+    assert np.array_equal(new_coordinates, water_molecule.coordinates)
+
+def test_create_failure():
+
+    name = 25
+    symbols = ["H", "O", "H"]
+    coordinates = np.zeros([3, 3])
+
+    with pytest.raises(TypeError):
+        water = geometry_analysis.Molecule(name, symbols, coordinates)
+
+
+# def test_geometry_analysis_imported():
+#     """Test that bond list is rebuilt when we reset coordiantes."""
+#

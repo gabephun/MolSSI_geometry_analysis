@@ -23,7 +23,7 @@ setup(
     # Self-descriptive entries which should always be present
     name='geometry_analysis',
     author='Gabe',
-    author_email='gabephun@mgial.com',
+    author_email='gabephun@gmail.com',
     description=short_description[0],
     long_description=long_description,
     long_description_content_type="text/markdown",
