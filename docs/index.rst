@@ -14,7 +14,7 @@ A link to `Google <www.google.com>`_.
    :caption: Contents:
 
    something
-
+   api
 
 .. geometry_analysis documentation master file, created by
    sphinx-quickstart on Thu Mar 15 13:55:56 2018.
